@@ -8,7 +8,10 @@ router.post("/save", async (req, res) => {
             name: req.body.name,
             image: req.body.image,
             artist: req.body.artist,
+            language: req.body.language,
+            playlist: req.body.playlist,
         });
+        
     try {
         const savedAlbumOnDB = await newAlbum.save();
         return res.status(200).send({ success: true, album: savedAlbumOnDB });
@@ -77,6 +80,8 @@ router.put('/update/:id', async (req, res) => {
         const result = await album.findOneAndUpdate(filter, {
             name: req.body.name,
             image: req.body.image,
+            language: req.body.language,
+            playlist: req?.body?.playlist
         }, options);
 
         return res.status(200).send({ success: true, data: result });
