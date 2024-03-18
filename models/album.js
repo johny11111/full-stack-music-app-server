@@ -11,6 +11,11 @@ const albumSchema = mongoose.Schema(
             required: true,
         },
 
+        artist:{
+            type: 'string',
+            required: true,
+        },
+
         playlist: {
             type: 'array',
             required: false,
