@@ -98,5 +98,27 @@ try {
 
 })
 
+route.delete("/delete/:id", async (req, res) => {
+    try {
+        const filter = { _id: req.params.id };
+        if(filter){
+            const userId = filter._id
+            const result = await user.findOneAndDelete(filter , { _id: userId  });
+    
+            if (result === null) {
+                return res.status(400).send({ success: false, msg: "artist not found" });
+            } else {
+                return res.status(200).send({ success: true, msg: "artist deleted successfully", data: result });
+            }
+
+        }
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send({ success: false, msg: "Internal server error" });
+    }
+});
+
+
 
 module.exports = route
