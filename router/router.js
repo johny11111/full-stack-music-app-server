@@ -6,7 +6,7 @@ const artistRoutes = require("./routes/routeArtist" )
 const albumRoutes = require("./routes/routeAlbums" )
 const songRoutes = require("./routes/routeSongs" )
 
-router.use("/users", userRoute)
+router.use("/users/", userRoute)
 
 
 router.use("/artists/", artistRoutes)

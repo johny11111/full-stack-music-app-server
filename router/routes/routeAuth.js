@@ -1,6 +1,6 @@
 const route = require('express').Router()
 const admin = require("../../config/firebase.config");
-const user = require('../../models/user');
+const users = require('../../models/user');
 const User = require("../../models/user");
 
 
@@ -71,7 +71,7 @@ route.get('/login', async (req, res) => {
 
 route.get('/getAllUsers', async (req, res) => {
     try {
-        const data = await user.find().sort({ createdAt: 1 });
+        const data = await users.find().sort({ createdAt: 1 });
 
         if (data.length > 0) {
             const leanData = data.map(doc => doc.toObject());
@@ -94,7 +94,7 @@ route.put("/updateRole/:userId", async (req, res) => {
     };
 
     try {
-        const result = await user.findOneAndUpdate(filter, { role: role }, option);
+        const result = await users.findOneAndUpdate(filter, { role: role }, option);
         res.status(200).send({ user: result })
     } catch (error) {
         return res.status(404).send({ success: false, msg: error });
@@ -102,22 +102,24 @@ route.put("/updateRole/:userId", async (req, res) => {
 
 })
 
-route.delete("/delete/:userId", async (req, res) => {
+
+route.delete("/delete/:id", async (req, res) => {
     try {
         const filter = { _id: req.params.id };
-
-        const result = await user.deleteOne(filter);
-
-        if (result === null) {
-            return res.status(400).send({ success: false, msg: "user not found" });
-        } else {
-            return res.status(200).send({ success: true, msg: "user deleted successfully", data: result });
+        if (filter) {
+            const result = await users.findOneAndDelete(filter , { _id: filter._id});
+         
+            if (result === null) {
+                return res.status(400).send({ success: false, msg: "user not found" });
+            } else {
+                return res.status(200).send({ success: true, msg: "user deleted successfully", data: result });
+            }
         }
     } catch (error) {
         console.error(error);
         return res.status(500).send({ success: false, msg: "Internal server error" });
     }
-});
+})
 
 
 
