@@ -7,7 +7,7 @@ dotenv.config()
 const cors = require('cors');
 const { default: db } = require('mongoose')
 
-app.use(cors({ origin: true }));
+app.use(cors());
 app.use(express.json());
 
 const router = require("./router/router")

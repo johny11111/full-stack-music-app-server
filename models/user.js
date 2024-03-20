@@ -38,4 +38,4 @@ const userSCM = mongoose.Schema({
     { timestamps: true }
 );
 
-module.exports = mongoose.model('User', userSCM)
+module.exports = mongoose.model('user', userSCM)

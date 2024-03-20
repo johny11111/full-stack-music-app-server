@@ -4,6 +4,7 @@ const user = require('../../models/user');
 const User = require("../../models/user");
 
 
+
 route.get('/login', async (req, res) => {
     if (!req.headers.authorization) {
         return res.status(500).send({ massage: "Invalid Token" })
@@ -81,34 +82,34 @@ route.get('/getAllUsers', async (req, res) => {
     }
 })
 
-route.put("/updateRole/:userId" , async (req, res) => {
-    const filter = {_id: req.params.userId}
+route.put("/updateRole/:userId", async (req, res) => {
+    const filter = { _id: req.params.userId }
     const role = req.body.data.role
-const option = {
-    upsert: true,
-    new: true,
-};
+    const option = {
+        upsert: true,
+        new: true,
+    };
 
-try {
-    const result = await user.findOneAndUpdate(filter , {role : role}, option);
-    res.status(200).send({user : result})
-} catch (error) {
-    return res.status(404).send({ success: false, msg: error });
-}
+    try {
+        const result = await user.findOneAndUpdate(filter, { role: role }, option);
+        res.status(200).send({ user: result })
+    } catch (error) {
+        return res.status(404).send({ success: false, msg: error });
+    }
 
 })
 
 route.delete("/delete/:id", async (req, res) => {
     try {
-        const filter = { _id: req.params.id };
-        if(filter){
-            const userId = filter._id
-            const result = await user.findOneAndDelete(filter , { _id: userId  });
-    
+        const filter = { _id: req.params.id.split('=')[1] };
+        console.log(filter);
+        if (filter) {
+            const result = await User.findOneAndDelete(filter, { _id: req.params.id});
+            console.log(result);
             if (result === null) {
-                return res.status(400).send({ success: false, msg: "artist not found" });
+                return res.status(400).send({ success: false, msg: "user not found" });
             } else {
-                return res.status(200).send({ success: true, msg: "artist deleted successfully", data: result });
+                return res.status(200).send({ success: true, msg: "user deleted successfully", data: result });
             }
 
         }
