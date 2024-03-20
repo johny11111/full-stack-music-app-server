@@ -4,30 +4,6 @@ const user = require('../../models/user');
 const User = require("../../models/user");
 
 
-route.get('/login', async (req, res) => {
-    if (!req.headers.authorization) {
-        return res.status(500).send({ massage: "Invalid Token" })
-    }
-    const token = req.headers.authorization.split(" ")[1];
-
-    try {
-        const codeValue = await admin.auth().verifyIdToken(token);
-        if (!codeValue) {
-            return res.status(505).send({ massage: "unauthorized" })
-        } else {
-            const existUser = await User.findOne({ "userId": codeValue.user_id })
-
-            if (!existUser) {
-                return newUserValue(codeValue, req, res)
-
-            } else {
-                return updateUserData(codeValue, req, res)
-            }
-        }
-    } catch (err) {
-        return res.status(505).send({ message: err })
-    }
-})
 
 const newUserValue = async (codeValue, req, res) => {
     const newUser = new User({
@@ -38,6 +14,7 @@ const newUserValue = async (codeValue, req, res) => {
         emailVerified: codeValue.email_verified,
         role: "member",
         authTime: codeValue.auth_time,
+        playlist: [],
     })
     try {
         const savedUser = await newUser.save();
@@ -66,6 +43,32 @@ const updateUserData = async (codeValue, req, res) => {
     }
 }
 
+
+route.get('/login', async (req, res) => {
+    if (!req.headers.authorization) {
+        return res.status(500).send({ massage: "Invalid Token" })
+    }
+    const token = req.headers.authorization.split(" ")[1];
+
+    try {
+        const codeValue = await admin.auth().verifyIdToken(token);
+        if (!codeValue) {
+            return res.status(505).send({ massage: "unauthorized" })
+        } else {
+            const existUser = await User.findOne({ "userId": codeValue.user_id })
+
+            if (!existUser) {
+                return newUserValue(codeValue, req, res)
+
+            } else {
+                return updateUserData(codeValue, req, res)
+            }
+        }
+    } catch (err) {
+        return res.status(505).send({ message: err })
+    }
+})
+
 route.get('/getAllUsers', async (req, res) => {
     try {
         const data = await user.find().sort({ createdAt: 1 });
@@ -81,22 +84,25 @@ route.get('/getAllUsers', async (req, res) => {
     }
 })
 
-route.put("/updateRole/:userId" , async (req, res) => {
-    const filter = {_id: req.params.userId}
-    const role = req.body.data.role
-const option = {
-    upsert: true,
-    new: true,
-};
 
-try {
-    const result = await user.findOneAndUpdate(filter , {role : role}, option);
-    res.status(200).send({user : result})
-} catch (error) {
-    return res.status(404).send({ success: false, msg: error });
-}
+route.put("/updateRole/:userId", async (req, res) => {
+    const filter = { _id: req.params.userId }
+    const role = req.body.data.role
+    const option = {
+        upsert: true,
+        new: true,
+    };
+
+    try {
+        const result = await user.findOneAndUpdate(filter, { role: role }, option);
+        res.status(200).send({ user: result })
+    } catch (error) {
+        return res.status(404).send({ success: false, msg: error });
+    }
 
 })
+
+
 
 
 module.exports = route

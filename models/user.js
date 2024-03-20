@@ -30,6 +30,10 @@ const userSCM = mongoose.Schema({
         type: "string",
         required: true,
     },
+    playlist: {
+        type: "array",
+        required: false,
+    },
 },
     { timestamps: true }
 );
