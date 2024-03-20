@@ -102,6 +102,22 @@ route.put("/updateRole/:userId", async (req, res) => {
 
 })
 
+router.delete("/delete/:userId", async (req, res) => {
+    try {
+        const filter = { _id: req.params.id };
+
+        const result = await user.deleteOne(filter);
+
+        if (result === null) {
+            return res.status(400).send({ success: false, msg: "user not found" });
+        } else {
+            return res.status(200).send({ success: true, msg: "user deleted successfully", data: result });
+        }
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send({ success: false, msg: "Internal server error" });
+    }
+});
 
 
 
