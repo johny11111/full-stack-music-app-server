@@ -102,7 +102,7 @@ route.put("/updateRole/:userId", async (req, res) => {
 
 })
 
-router.delete("/delete/:userId", async (req, res) => {
+route.delete("/delete/:userId", async (req, res) => {
     try {
         const filter = { _id: req.params.id };
 
