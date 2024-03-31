@@ -122,6 +122,25 @@ route.delete("/delete/:id", async (req, res) => {
     }
 });
 
+route.put("/updatePlaylist/:userId", async (req, res) => {
+    const filter = { _id: req.params.userId }
+    const playlist = req.body.data
+    
+    const option = {
+        upsert: true,
+        new: true,
+    };
+
+    try {
+        const result = await user.findOneAndUpdate(filter, { $addToSet: { playlist: playlist } }, option);
+        res.status(200).send({ user: result })
+    } catch (error) {
+        return res.status(404).send({ success: false, msg: error });
+    }
+})
+
+
+
 
 
 module.exports = route

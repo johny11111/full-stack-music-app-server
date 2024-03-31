@@ -9,7 +9,6 @@ router.post("/save", async (req, res) => {
             image: req.body.image,
             artist: req.body.artist,
             language: req.body.language,
-            playlist: req.body.playlist,
         });
         
     try {

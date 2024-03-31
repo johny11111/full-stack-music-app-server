@@ -8,7 +8,7 @@ const albumSchema = mongoose.Schema(
         },
         image: {
             type: 'string',
-            required: true,
+            required: false,
         },
 
         artist:{
@@ -20,11 +20,7 @@ const albumSchema = mongoose.Schema(
             type: 'string',
             required: true,
         },
-        
-        playlist: {
-            type: 'array',
-            required: false,
-        },
+    
         
     },
     { timestamps: true }
