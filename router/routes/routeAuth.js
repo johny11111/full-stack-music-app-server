@@ -19,7 +19,9 @@ route.get('/login', async (req, res) => {
             const existUser = await User.findOne({ "userId": codeValue.user_id })
 
             if (!existUser) {
-                return newUserValue(codeValue, req, res)
+                // return newUserValue(codeValue, req, res)
+                return res.status(505).send({ message: "mail not found " })
+                
 
             } else {
                 return updateUserData(codeValue, req, res)
